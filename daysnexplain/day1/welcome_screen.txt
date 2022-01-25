@@ -1,0 +1,48 @@
+//controller ticker
+//animation -----(variable)
+//colortween -----(there are other tween wigets too)
+
+we need a ticker that is 'controller' for this senario
+
+so we need to provide the ability to the class to have ticker
+
+class _welcomeScreenState extends State<welcomeScreen> with singleTickerProviderStateMixin{
+    animationcontroller? controller ----->(ticker variable)
+    animation? animation ---------->(variable for jumping flash)
+    animation? animation2 ---------->(color change background)
+
+      @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(       ----------->initalize the controller variable
+      duration: Duration(seconds: 1),
+      vsync: this,                 -------------> refers to the class
+    );
+
+    animation = CurvedAnimation(parent: controller!, curve: Curves.decelerate); --------------> graph animation check flutter docs 
+    animation2 = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        .animate(controller!);
+
+    controller!.forward();  -------------> ticker for 0 to 1 
+    animation!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller!.reverse(from: 1.0);
+      } else if (status == AnimationStatus.dismissed) {     ----------------> code to loop the animation
+        controller!.forward();
+      }
+    });
+
+    controller!.addListener(() {
+      setState(() {});  --------------> wont work without set state cause it wont built stuff
+      print(animation2!.value);
+    });
+  }
+
+
+
+    @override
+  void dispose() {
+    controller!.dispose();  ----------------> dispose of the ticker so that memory isnt wasted 
+    super.dispose();
+  }
+}
