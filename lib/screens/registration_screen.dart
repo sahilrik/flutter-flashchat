@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flashchat/components/roundedbutton.dart';
 import 'package:flashchat/constants.dart';
+import 'package:flashchat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -13,6 +16,10 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  final _auth = FirebaseAuth.instance;
+  late String email;
+  late String password;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,28 +41,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               height: 48.0,
             ),
             TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
-                //Do something with the user input.
+                email = value;
               },
-              decoration: KTextFieldInputDecoration.copyWith(hintText: 'enter your email'),
+              decoration: KTextFieldInputDecoration.copyWith(
+                  hintText: 'enter your email'),
             ),
             SizedBox(
               height: 8.0,
             ),
             TextField(
+              keyboardType: TextInputType.visiblePassword,
+              obscureText: true,
+              textAlign: TextAlign.center,
               onChanged: (value) {
-                //Do something with the user input.
+                password = value;
               },
-              decoration: KTextFieldInputDecoration.copyWith(hintText: 'enter your password'),
+              decoration: KTextFieldInputDecoration.copyWith(
+                  hintText: 'enter your password'),
             ),
             SizedBox(
               height: 24.0,
-            ),RoundedButton(
+            ),
+            RoundedButton(
               title: 'register',
               colour: Colors.blueAccent,
-              onpressed: (){},
+              onpressed: () async {
+                try {
+                  final newuser = await _auth.createUserWithEmailAndPassword(
+                      email: email, password: password);
+                  if (newuser != null) {
+                    Navigator.pushNamed(context, ChatScreen.id);
+                  }
+                } catch (e) {
+                  print(e);
+                }
+              },
             )
-
           ],
         ),
       ),
