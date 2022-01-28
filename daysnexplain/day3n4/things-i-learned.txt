@@ -1,0 +1,12 @@
+packages i used:
+
+    firebase_core: ^1.11.0
+    firebase_auth: ^3.3.5
+    cloud_firestore: ^3.1.6
+    modal_progress_hud_nsn: ^0.1.0-nullsafety-0
+
+learned about the changes in :
+    built.gradle(both project lvl and app lvl)
+    void main()----------(few new wigets written main.txt)
+    logic for registerindg a user and then checking if properly registered or not 
+    cloud firestore
